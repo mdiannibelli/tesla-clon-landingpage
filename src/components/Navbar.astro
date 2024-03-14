@@ -1,0 +1,26 @@
+---
+import Teslaicon from '../components/icons/tesla-icon.astro'
+import Questionicon from '../components/icons/question-icon.astro'
+import Worldicon from '../components/icons/world-icon.astro'
+import Personicon from '../components/icons/person-icon.astro'
+---
+
+<header class="flex py-4 px-14 justify-between items-center w-full fixed top-0 z-40">
+        <div class="flex-grow">
+            <Teslaicon class='w-28 text-white'/>
+        </div>
+    
+    
+        <ul class="flex text-md font-medium [&>li>a]:inline-block [&>li>a]:text-white [&>li>a]:pl-8">
+            <li><a href="#">Vehicles</a></li>
+            <li><a href="#">Energy</a></li>
+            <li><a href="#">Charging</a></li>
+            <li><a href="#">Discover</a></li>
+            <li><a href="#">Shop</a></li>
+        </ul>
+        <ul class="flex [&>li>a]:inline-block [&>li>a]:pl-3 [&>li>a]:text-white flex-grow justify-end">
+            <li><a href="#"><Questionicon class="size-6"/></a></li>
+            <li><a href="#"><Worldicon class="size-6"/></a></li>
+            <li><a href="#"><Personicon class="size-6"/></a></li>
+        </ul>
+</header>
