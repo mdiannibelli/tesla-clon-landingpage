@@ -5,22 +5,83 @@ import Worldicon from '../components/icons/world-icon.astro'
 import Personicon from '../components/icons/person-icon.astro'
 ---
 
-<header class="flex py-4 px-14 justify-between items-center w-full fixed top-0 z-40">
-        <div class="flex-grow">
-            <Teslaicon class='w-28 text-white'/>
+<header id="header-container" class="flex py-4 px-14 justify-between items-center w-full fixed top-0 z-40">
+        <div class="flex-grow flex justify-center items-center gap-x-12">
+            <Teslaicon class='w-28 text-current'/>
+            <ul class="flex md:hidden text-md font-medium [&>li>a]:text-current [&>li>a]:inline-block [&>li>a]:px-4">
+                <li class="bg-black/5 backdrop-blur-lg rounded "><a href="#">Menu</a></li>
+            </ul>
         </div>
-    
-    
-        <ul class="flex text-md font-medium [&>li>a]:inline-block [&>li>a]:text-white [&>li>a]:pl-8">
-            <li><a href="#">Vehicles</a></li>
-            <li><a href="#">Energy</a></li>
-            <li><a href="#">Charging</a></li>
-            <li><a href="#">Discover</a></li>
-            <li><a href="#">Shop</a></li>
+        <ul class="hidden md:flex text-md font-medium [&>li>a]:text-current [&>li>a]:inline-block [&>li>a]:px-4">
+            <li class="navigate-text"><a href="#">Vehicles</a></li>
+            <li class="navigate-text"><a href="#">Energy</a></li>
+            <li class="navigate-text"><a href="#">Charging</a></li>
+            <li class="navigate-text"><a href="#">Discover</a></li>
+            <li class="navigate-text"><a href="#">Shop</a></li>
         </ul>
-        <ul class="flex [&>li>a]:inline-block [&>li>a]:pl-3 [&>li>a]:text-white flex-grow justify-end">
+        <ul class="hidden md:flex [&>li>a]:inline-block [&>li>a]:pl-3 [&>li>a]:text-current flex-grow justify-end">
             <li><a href="#"><Questionicon class="size-6"/></a></li>
             <li><a href="#"><Worldicon class="size-6"/></a></li>
             <li><a href="#"><Personicon class="size-6"/></a></li>
         </ul>
+
+        <div id="menu-backdrop"
+        class="absolute bg-black/5 backdrop-blur-lg rounded left-[var(--left)] top-[var(--top)] w-[var(--width)] h-[var(--height)] transition-all duration-300 ease-in-out opacity-0 -z-10">
+
+        </div>
 </header>
+
+<script>
+    const itemList = document.querySelectorAll('.navigate-text')
+    const menuBackdrop = document.querySelector('#menu-backdrop') as HTMLElement || null;
+
+    itemList.forEach((item) => {
+        item.addEventListener('mouseenter', () => {
+            const {left, top, width, height} = item.getBoundingClientRect() // return x: y: width: height: top: etc
+            const {clientHeight, clientWidth} = item;
+
+           // console.log({left,top,width,height})
+           // console.log({clientHeight, clientWidth})
+            // console.log(menuBackdrop,)
+           if(menuBackdrop) {
+               menuBackdrop.style.setProperty("--left", `${left}px`) // changing [var(property)]
+               menuBackdrop.style.setProperty("--top", `${top}px`)
+               menuBackdrop.style.setProperty("--width", `${width}px`)
+               menuBackdrop.style.setProperty("--height", `${height}px`)
+               menuBackdrop.style.opacity = '1'
+               menuBackdrop.style.visibility = 'visible';
+           }
+        })
+        if(menuBackdrop){
+            item.addEventListener('mouseleave', () => {
+                menuBackdrop.style.opacity = '0'
+                menuBackdrop.style.visibility = 'hidden';
+            })
+        }
+    })
+</script>
+
+<script>
+    const observerOptions = {
+        root: null, // default viewport
+        rootMargin: '0px', // when see element
+        threshold: 0.8
+    }
+
+    const headerE = document.querySelector('#header-container') as HTMLElement || null;
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => { // for each entrie
+            const {isIntersecting} = entry;
+            if(isIntersecting) {
+                const color = entry.target.getAttribute('data-header-color') // get color of target entry
+                if(color) {
+                    headerE.style.color = color
+                }
+            }
+        }) 
+    }, observerOptions)
+
+    const sectionElement = document.querySelectorAll('.landing-section');
+    sectionElement.forEach((section) => observer.observe(section))
+</script>
